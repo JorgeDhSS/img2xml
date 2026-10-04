@@ -20,9 +20,9 @@ start = time.time()
 print(start)
 
 #work at the yolov5 directory
-os.chdir('/Users/tomoimacpro/TSh_project/bfaaap/yolov5/')
+os.chdir('/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/')
 
-FILE_PATH ='/Users/tomoimacpro/TSh_project/bfaaap/musicdata/emisan/sarabandePhotoInclinedのコピー.jpg'
+FILE_PATH ='/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/musicdata/test0/sarabandePhotoInclined.jpg'
 
 #First, level the original sheet music image
 from leveloriginalimg.leveloriginalimg import leveloriginalimg
@@ -32,7 +32,7 @@ FILE_PATH = leveloriginalimg(FILE_PATH)
 #extract staves with measures
 SAVE_DIRECTORY_PATH = os.path.dirname(FILE_PATH) + '/staff'
 
-proc = subprocess.Popen(['python','detect.py', '--weights', '/Users/tomoimacpro/TSh_project/bfaaap/yolov5/weightsstock/last_0.95_staff4_20201230.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.75', '--source', FILE_PATH, '--save-txt'])
+proc = subprocess.Popen(['python3','detect.py', '--weights', '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/weightsstock/last_0.95_staff4_20201230.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.75', '--source', FILE_PATH, '--save-txt'])
 proc.wait()
 
 
@@ -42,7 +42,7 @@ proc.wait()
 
 #copy and move the relevant files under a dirctory ./musicdata/AAA/(staff/labels)
 #sheet music (.jpg) provided in FILE_PATH
-# FILE_PATH = '/Users/tomoimacpro/TSh_project/bfaaap/musicdata/patheticMov2/PatheticMov2_1.jpg'
+# FILE_PATH = '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/musicdata/patheticMov2/PatheticMov2_1.jpg'
 
 files_temp = glob.glob(FILE_PATH) #"./tmp/*":beforehand prepare images and Yolov5 anotation files in ./tmp/subdirectory
     #To skip .txt files
@@ -111,13 +111,13 @@ for file_temp in files_temp:
 apply individual models to the measures selected for staff 1 or 2
 """
 #work at the yolov5 directory
-os.chdir('/Users/tomoimacpro/TSh_project/bfaaap/yolov5/')
+os.chdir('/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/')
 
 #processes in parallel
 processes = []
 
 
-# FILE_PATH ='/Users/tomoimacpro/TSh_project/bfaaap/musicdata/testfordetection1/PatheticMov2_1.jpg'
+# FILE_PATH ='/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/musicdata/testfordetection1/PatheticMov2_1.jpg'
 #image source directory path for either staff1 or staff2
 """
 #For staff1
@@ -126,27 +126,27 @@ SOURCE_PATH = os.path.dirname(FILE_PATH) + '/measure/staff1/*'
 
 #body
 SAVE_DIRECTORY_PATH = os.path.dirname(FILE_PATH) + '/staff1/body'
-proc = subprocess.Popen(['python','detect.py', '--weights', '/Users/tomoimacpro/TSh_project/bfaaap/yolov5/weightsstock/last_0.94_body4_20210208.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
+proc = subprocess.Popen(['python3','detect.py', '--weights', '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/weightsstock/last_0.94_body4_20210208.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
 # proc.wait()
 processes.append((0, proc))
 #armbeam
 SAVE_DIRECTORY_PATH = os.path.dirname(FILE_PATH) + '/staff1/armbeam'
-proc = subprocess.Popen(['python','detect.py', '--weights', '/Users/tomoimacpro/TSh_project/bfaaap/yolov5/weightsstock/last_0.99_armbeam2_20210214.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
+proc = subprocess.Popen(['python3','detect.py', '--weights', '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/weightsstock/last_0.99_armbeam2_20210214.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
 # proc.wait()
 processes.append((1, proc))
 #accidental
 SAVE_DIRECTORY_PATH = os.path.dirname(FILE_PATH) + '/staff1/accidental'
-proc = subprocess.Popen(['python','detect.py', '--weights', '/Users/tomoimacpro/TSh_project/bfaaap/yolov5/weightsstock/last_0.99_Accidental2_20210209.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
+proc = subprocess.Popen(['python3','detect.py', '--weights', '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/weightsstock/last_0.99_Accidental2_20210209.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
 # proc.wait()
 processes.append((2, proc))
 #rest
 SAVE_DIRECTORY_PATH = os.path.dirname(FILE_PATH) + '/staff1/rest'
-proc = subprocess.Popen(['python','detect.py', '--weights', '/Users/tomoimacpro/TSh_project/bfaaap/yolov5/weightsstock/last_0.99_rest1_20210107.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
+proc = subprocess.Popen(['python3','detect.py', '--weights', '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/weightsstock/last_0.99_rest1_20210107.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
 # proc.wait()
 processes.append((3, proc))
 #clef
 SAVE_DIRECTORY_PATH = os.path.dirname(FILE_PATH) + '/staff1/clef'
-proc = subprocess.Popen(['python','detect.py', '--weights', '/Users/tomoimacpro/TSh_project/bfaaap/yolov5/weightsstock/last_0.99_Clef3_20210129.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
+proc = subprocess.Popen(['python3','detect.py', '--weights', '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/weightsstock/last_0.99_Clef3_20210129.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
 # proc.wait()
 processes.append((4, proc))
 """
@@ -156,27 +156,27 @@ SOURCE_PATH = os.path.dirname(FILE_PATH) + '/measure/staff2/*'
 
 #body
 SAVE_DIRECTORY_PATH = os.path.dirname(FILE_PATH) + '/staff2/body'
-proc = subprocess.Popen(['python','detect.py', '--weights', '/Users/tomoimacpro/TSh_project/bfaaap/yolov5/weightsstock/last_0.94_body4_20210208.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
+proc = subprocess.Popen(['python3','detect.py', '--weights', '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/weightsstock/last_0.94_body4_20210208.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
 # proc.wait()
 processes.append((5, proc))
 #armbeam
 SAVE_DIRECTORY_PATH = os.path.dirname(FILE_PATH) + '/staff2/armbeam'
-proc = subprocess.Popen(['python','detect.py', '--weights', '/Users/tomoimacpro/TSh_project/bfaaap/yolov5/weightsstock/last_0.99_armbeam2_20210214.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
+proc = subprocess.Popen(['python3','detect.py', '--weights', '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/weightsstock/last_0.99_armbeam2_20210214.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
 # proc.wait()
 processes.append((6, proc))
 #accidental
 SAVE_DIRECTORY_PATH = os.path.dirname(FILE_PATH) + '/staff2/accidental'
-proc = subprocess.Popen(['python','detect.py', '--weights', '/Users/tomoimacpro/TSh_project/bfaaap/yolov5/weightsstock/last_0.99_Accidental2_20210209.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
+proc = subprocess.Popen(['python3','detect.py', '--weights', '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/weightsstock/last_0.99_Accidental2_20210209.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
 # proc.wait()
 processes.append((7, proc))
 #rest
 SAVE_DIRECTORY_PATH = os.path.dirname(FILE_PATH) + '/staff2/rest'
-proc = subprocess.Popen(['python','detect.py', '--weights', '/Users/tomoimacpro/TSh_project/bfaaap/yolov5/weightsstock/last_0.99_rest1_20210107.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
+proc = subprocess.Popen(['python3','detect.py', '--weights', '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/weightsstock/last_0.99_rest1_20210107.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
 # proc.wait()
 processes.append((8, proc))
 #clef
 SAVE_DIRECTORY_PATH = os.path.dirname(FILE_PATH) + '/staff2/clef'
-proc = subprocess.Popen(['python','detect.py', '--weights', '/Users/tomoimacpro/TSh_project/bfaaap/yolov5/weightsstock/last_0.99_Clef3_20210129.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
+proc = subprocess.Popen(['python3','detect.py', '--weights', '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/weightsstock/last_0.99_Clef3_20210129.pt', '--SAVE_PATH', SAVE_DIRECTORY_PATH ,'--img', '416', '--conf', '0.60', '--source', SOURCE_PATH, '--save-txt'])
 # proc.wait()
 processes.append((9, proc))
 

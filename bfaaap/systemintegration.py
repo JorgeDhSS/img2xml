@@ -16,7 +16,7 @@ from itertools import chain
 
 #copy and move the relevant files under a dirctory ./musicdata/AAA/(staff/labels)
 #sheet music (.jpg) provided in FILE_PATH
-FILE_PATH = '/Users/tomoimacpro/TSh_project/bfaaap/musicdata/emisan/leveled_sarabandePhotoInclinedのコピー.jpg'
+FILE_PATH = '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/musicdata/emisan/leveled_sarabandePhotoInclinedのコピー.jpg'
 
 
 files_temp = glob.glob(FILE_PATH) #"./tmp/*":beforehand prepare images and Yolov5 anotation files in ./tmp/subdirectory
@@ -164,7 +164,7 @@ xmlstr_1 = xmlstr_1[23:]
 
 #template.xmlファイルを読み込んで得られたpart_etのXMLデータと結合して全体XMLを作る
 wholeXML_staff1_text = ""
-with open("/Users/tomoimacpro/TSh_project/bfaaap/yoloToxml/template.xml", 'r') as f:
+with open("/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yoloToxml/template.xml", 'r') as f:
     template_text = f.read()
     wholeXML_staff1_text = template_text +'\n' + xmlstr_1 +'\n</score-partwise>'
 
@@ -192,7 +192,7 @@ xmlstr_2 = xmlstr_2[23:]
 
 #template.xmlファイルを読み込んで得られたpart_etのXMLデータと結合して全体XMLを作る
 wholeXML_staff2_text = ""
-with open("/Users/tomoimacpro/TSh_project/bfaaap/yoloToxml/template.xml", 'r') as f:
+with open("/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yoloToxml/template.xml", 'r') as f:
     template_text = f.read()
     wholeXML_staff2_text = template_text +'\n' + xmlstr_2 +'\n</score-partwise>'
 
@@ -221,7 +221,7 @@ xmlstr_1and2 = xmlstr_1and2[23:]
 
 #template.xmlファイルを読み込んで得られたpart_etのXMLデータと結合して全体XMLを作る
 wholeXML_staves1and2_text = ""
-with open("/Users/tomoimacpro/TSh_project/bfaaap/yoloToxml/template.xml", 'r') as f:
+with open("/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yoloToxml/template.xml", 'r') as f:
     template_text = f.read()
     wholeXML_staves1and2_text = template_text +'\n' + xmlstr_1and2 +'\n</score-partwise>'
 

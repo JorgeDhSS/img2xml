@@ -148,7 +148,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='yolov5s.pt', help='model.pt path(s)')
     parser.add_argument('--source', type=str, default='data/images', help='source')  # file/folder, 0 for webcam
-    parser.add_argument('--SAVE_PATH', type=str, default='/Users/tomoimacpro/TSh_project/bfaaap/musicdata/tmp', help='results saving path')  # file/folder, 0 for webcam
+    parser.add_argument('--SAVE_PATH', type=str, default='/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/musicdata/tmp', help='results saving path')  # file/folder, 0 for webcam
 
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
@@ -166,7 +166,7 @@ if __name__ == '__main__':
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     opt = parser.parse_args()
     print(opt)
-    check_requirements()
+    #check_requirements()
 
     with torch.no_grad():
         if opt.update:  # update all models (to fix SourceChangeWarning)

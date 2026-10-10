@@ -16,7 +16,7 @@ from itertools import chain
 
 #copy and move the relevant files under a dirctory ./musicdata/AAA/(staff/labels)
 #sheet music (.jpg) provided in FILE_PATH
-FILE_PATH = '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/musicdata/emisan/leveled_sarabandePhotoInclinedのコピー.jpg'
+FILE_PATH = '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/musicdata/test0/leveled_sarabandePhotoInclined.jpg'
 
 
 files_temp = glob.glob(FILE_PATH) #"./tmp/*":beforehand prepare images and Yolov5 anotation files in ./tmp/subdirectory
@@ -123,7 +123,7 @@ print(f'ms_sequenceOfInterest_staff2の要素数は{len(ms_sequenceOfInterest_st
 generate a dictionary for ET
 
 """
-from makeyolomusicdict.generatedictforxml import generateDictForET_singlestaff, generateDictForET_twostaves
+from makeyolomusicdict.generatedictforxml import generateDictForET_singlestaff
 
 #for staff1
 current_staff1_clef = Clef.G
@@ -139,14 +139,63 @@ print(f'dictionary_for_ET_staff2[0]の要素の数は\n{len(part_content2)}')
 
 print(f'current_staff1_clef:{current_staff1_clef}\ncurrent_staff2_clef:{current_staff2_clef}')
 #for both staff1 and staff2
-dictionary_for_ET_staves1and2 = generateDictForET_twostaves(ms_sequence_staff1_input=ms_sequenceOfInterest_staff1, ms_sequence_staff2_input=ms_sequenceOfInterest_staff2, tempo=tempo, beats=beats, beat_type=beat_type, fifths=fifths, clef_staff1_input=current_staff1_clef, clef_staff2_input=current_staff2_clef)
-part_content1and2 = dictionary_for_ET_staves1and2['part']
-print(f'dictionary_for_ET_staves1and2[0]の要素の数は\n{len(part_content1and2)}')
+#dictionary_for_ET_staves1and2 = generateDictForET_twostaves(ms_sequence_staff1_input=ms_sequenceOfInterest_staff1, ms_sequence_staff2_input=ms_sequenceOfInterest_staff2, tempo=tempo, beats=beats, beat_type=beat_type, fifths=fifths, clef_staff1_input=current_staff1_clef, clef_staff2_input=current_staff2_clef)
+#part_content1and2 = dictionary_for_ET_staves1and2['part']
+#print(f'dictionary_for_ET_staves1and2[0]の要素の数は\n{len(part_content1and2)}')
 
 #generate XML
 from yoloToxml.yoloToxml import musicData2XML
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+
+def merge_two_staves_to_xml(part1, part2, measure_duration):
+    part_combined = ET.Element('part')
+    part_combined.attrib = {'id': 'P1'}
+    measures_1 = part1.findall('measure')
+    measures_2 = part2.findall('measure')
+    max_len = max(len(measures_1), len(measures_2))
+    for i in range(max_len):
+        m1 = copy.deepcopy(measures_1[i]) if i < len(measures_1) else ET.Element('measure', {'number': str(i+1)})
+        m2 = copy.deepcopy(measures_2[i]) if i < len(measures_2) else ET.Element('measure', {'number': str(i+1)})
+        # 1. Configurar atributos y claves en el primer compás
+        attr1 = m1.find('attributes')
+        if attr1 is None:
+            attr1 = ET.Element('attributes')
+            m1.insert(0, attr1)
+        staves = attr1.find('staves')
+        if staves is None:
+            staves = ET.Element('staves')
+            staves.text = '2'
+            attr1.append(staves)
+        clef1 = attr1.find('clef')
+        if clef1 is not None: clef1.set('number', '1')
+        attr2 = m2.find('attributes')
+        if attr2 is not None:
+            clef2 = attr2.find('clef')
+            if clef2 is not None:
+                clef2.set('number', '2')
+                attr1.append(clef2)
+        # 2. Asignar etiquetas de pentagrama a las notas
+        for note in m1.findall('note') + m1.findall('direction'):
+            staff_tag = ET.Element('staff')
+            staff_tag.text = '1'
+            note.append(staff_tag)
+        for note in m2.findall('note') + m2.findall('direction'):
+            staff_tag = ET.Element('staff')
+            staff_tag.text = '2'
+            note.append(staff_tag)
+        # 3. Insertar el "rebobinado" de tiempo (Backup)
+        backup = ET.Element('backup')
+        duration = ET.Element('duration')
+        duration.text = str(int(measure_duration))
+        backup.append(duration)
+        m1.append(backup)
+        # 4. Pegar los elementos de la mano izquierda
+        for elem in m2:
+            if elem.tag not in ['attributes', 'print']:
+                m1.append(elem)
+        part_combined.append(m1)
+    return part_combined
 
 """
 #for staff1
@@ -210,27 +259,22 @@ with open(new_xml_filepath, 'w') as f:
 """
 part_et = ET.Element('part')
 part_et.attrib = {'id':'P1'}
-part_et_1and2 = musicData2XML(part_et, dictionary_for_ET_staves1and2)
+part_et_1and2 = merge_two_staves_to_xml(part_et_1, part_et_2, preset_measure_duration)
 
+# Convertir a texto XML bonito
 xmlstr_1and2 = minidom.parseString(ET.tostring(part_et_1and2)).toprettyxml(indent="   ")
+xmlstr_1and2 = xmlstr_1and2[23:] # Quitar el encabezado inicial duplicado
 
-#1行目の<?xml version="1.0"　?>を除く：　　結合するため
-xmlstr_1and2 = xmlstr_1and2[23:]
-# print(xmlstr_1)
-# print(f'XML化した結果データは{xmlstr_1}')                
-
-#template.xmlファイルを読み込んで得られたpart_etのXMLデータと結合して全体XMLを作る
+# Combinar con la plantilla maestra
 wholeXML_staves1and2_text = ""
 with open("/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yoloToxml/template.xml", 'r') as f:
     template_text = f.read()
-    wholeXML_staves1and2_text = template_text +'\n' + xmlstr_1and2 +'\n</score-partwise>'
+    wholeXML_staves1and2_text = template_text + '\n' + xmlstr_1and2 + '\n</score-partwise>'
 
-#save the resulting xml in ./xml/ directory
-FILE_DIR_PATH
-new_dir_path = FILE_DIR_PATH + '/xml'
-os.makedirs(new_dir_path, exist_ok=True)
-new_xml_filepath = new_dir_path + '/' + FILE_BASENAME_WITHOUTEXT + '_staves1and2.xml'
+# Guardar el archivo final
+new_xml_filepath = new_dir_path + '/' + FILE_BASENAME_WITHOUTEXT + '_staves1and2_combined.xml'
 with open(new_xml_filepath, 'w') as f:
     f.write(wholeXML_staves1and2_text)
-
+    
+print(f"¡Éxito! Partitura combinada guardada en: {new_xml_filepath}")
 

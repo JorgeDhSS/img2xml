@@ -3,7 +3,7 @@
 import cv2
 import glob
 import os
-import shutil
+import sys
 import numpy as np
 import math
 from enum import Enum, auto
@@ -16,8 +16,12 @@ from itertools import chain
 
 #copy and move the relevant files under a dirctory ./musicdata/AAA/(staff/labels)
 #sheet music (.jpg) provided in FILE_PATH
-FILE_PATH = '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/musicdata/test0/leveled_sarabandePhotoInclined.jpg'
-
+# PATH sent by FastAPI (subprocess)
+if len(sys.argv) > 1:
+    FILE_PATH = sys.argv[1]
+else:
+    # PATH if running this script directly
+    FILE_PATH = '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/musicdata/test0/sarabandePhotoInclined.jpg'
 
 files_temp = glob.glob(FILE_PATH) #"./tmp/*":beforehand prepare images and Yolov5 anotation files in ./tmp/subdirectory
 #To skip .txt files

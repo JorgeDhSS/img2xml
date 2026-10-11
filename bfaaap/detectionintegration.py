@@ -7,7 +7,7 @@ import os
 import subprocess
 import shutil
 import numpy as np
-import math
+import sys
 from enum import Enum, auto
 import copy
 from itertools import chain
@@ -22,7 +22,12 @@ print(start)
 #work at the yolov5 directory
 os.chdir('/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/yolov5/')
 
-FILE_PATH ='/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/musicdata/test0/sarabandePhotoInclined.jpg'
+# PATH sent by FastAPI (subprocess)
+if len(sys.argv) > 1:
+    FILE_PATH = sys.argv[1]
+else:
+    # PATH if running this script directly
+    FILE_PATH = '/Users/jorgedominguezherrera/tecnología interactiva/img2xml/bfaaap/musicdata/test0/sarabandePhotoInclined.jpg'
 
 #First, level the original sheet music image
 from leveloriginalimg.leveloriginalimg import leveloriginalimg
